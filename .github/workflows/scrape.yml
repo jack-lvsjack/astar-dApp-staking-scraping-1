@@ -1,0 +1,68 @@
+name: Scrape Astar Countdown
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"   # 每10分钟执行一次
+  workflow_dispatch:          # 允许手动触发
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # 允许推送到 gh-pages
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: |
+          npm --version
+          npm ci || npm install
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run scraper
+        run: npm run scrape
+        continue-on-error: false
+
+      - name: Setup Git for gh-pages
+        run: |
+          git fetch origin gh-pages:gh-pages || echo "gh-pages branch does not exist yet"
+          git checkout -B gh-pages || git checkout gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit data.json to gh-pages
+        run: |
+          # 如果 data.json 存在，移动到 index.json
+          if [ -f data.json ]; then
+            mv -f data.json index.json
+            git add index.json
+            TIMESTAMP=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+            git commit -m "update: $TIMESTAMP" || echo "No changes to commit"
+          else
+            echo "data.json not found, skipping commit"
+            exit 1
+          fi
+
+      - name: Push to gh-pages
+        run: |
+          git push origin gh-pages || git push -f origin gh-pages
+          echo "Pushed to gh-pages branch"
+
+      - name: Show public URL
+        run: |
+          REPO_NAME=$(echo ${{ github.repository }} | cut -d'/' -f2)
+          OWNER=$(echo ${{ github.repository }} | cut -d'/' -f1)
+          echo "Public URL: https://${OWNER}.github.io/${REPO_NAME}/index.json"
+          echo "View it at: https://${OWNER}.github.io/${REPO_NAME}/index.json"
+

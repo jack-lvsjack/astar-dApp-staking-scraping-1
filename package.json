@@ -1,0 +1,20 @@
+{
+  "name": "astar-countdown-scraper",
+  "version": "1.0.0",
+  "description": "Scrape countdown timer from Astar Network portal page",
+  "type": "module",
+  "scripts": {
+    "scrape": "node scripts/scrape.js"
+  },
+  "keywords": [
+    "scraper",
+    "astar",
+    "countdown"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "playwright": "^1.48.0"
+  }
+}
+

@@ -1,0 +1,9 @@
+node_modules/
+data.json
+*.png
+*.log
+.env
+.DS_Store
+debug-screenshot.png
+error-screenshot.png
+
