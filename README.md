@@ -95,11 +95,33 @@ const candidates = [
 
 ## 🐛 调试
 
+### GitHub Actions 抓取失败
+
 如果抓取失败：
 
 1. 在 GitHub Actions 的 Run 详情中查看日志
 2. 检查是否有 `debug-screenshot.png` 或 `error-screenshot.png`
 3. 根据实际页面 DOM 更新选择器
+
+### GitHub Pages 404 错误
+
+如果访问 `https://用户名.github.io/仓库名/index.json` 返回 404：
+
+**最可能的原因：未启用 GitHub Pages**
+
+1. 进入仓库的 **Settings** → **Pages**
+2. 配置：
+   - **Source**: Deploy from a branch
+   - **Branch**: `gh-pages`
+   - **Folder**: `/` (root)
+3. 保存后等待 1-2 分钟生效
+
+**其他可能原因：**
+
+- 检查仓库是否为 **Public**（私有仓库需要付费计划）
+- 确认 `gh-pages` 分支已创建（查看 Actions 日志）
+- 等待几分钟后重试（首次部署需要时间）
+- 检查 Pages 部署状态：Settings → Pages → "Visit site" 下方
 
 ## 📝 注意事项
 
