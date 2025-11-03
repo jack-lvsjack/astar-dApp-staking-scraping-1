@@ -2,7 +2,7 @@ name: Scrape Astar Countdown
 
 on:
   schedule:
-    - cron: "*/10 * * * *"   # 每10分钟执行一次
+    - cron: "0 */2 * * *"   # 每2小时执行一次
   workflow_dispatch:          # 允许手动触发
 
 jobs:
