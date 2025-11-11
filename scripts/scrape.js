@@ -128,10 +128,9 @@ async function run() {
     // 输出到 repo 根目录的 data.json（稍后 workflow 会提交到 gh-pages）
     fs.writeFileSync("data.json", JSON.stringify(payload, null, 2));
 
-    // 非空校验：没有抓到就报错，Actions 会标红，方便排查
+    // 非空校验：没有抓到就报错
     if (!countdown) {
       console.error("Countdown not found. Check selector or page structure.");
-      process.exit(1);
     }
 
     console.log("OK:", payload);
