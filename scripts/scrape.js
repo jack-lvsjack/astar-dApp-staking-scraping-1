@@ -106,13 +106,6 @@ async function run() {
       }
     }
 
-    // 2) 兜底：抓取整个页面可见文本再匹配
-    if (!pickCountdown(text)) {
-      console.log("Countdown not found with selectors, trying full page text...");
-      const bodyText = await page.evaluate(() => document.body.innerText);
-      text = bodyText;
-    }
-
     const countdown = pickCountdown(text);
 
     // 如果没有找到，尝试截图以便调试（在 Actions 中很有用）
